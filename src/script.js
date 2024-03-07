@@ -3,6 +3,8 @@ const cartModal = document.querySelector(".cart");
 const backDrop = document.querySelector(".backdrop");
 const closeModal = document.querySelector(".cart-item-confirm");
 const productCenter = document.querySelector(".products-center");
+const quantityOfOrder = document.querySelector(".cart-items");
+const cartTotal = document.querySelector(".cart-total");
 
 let cart = [];
 
@@ -80,15 +82,51 @@ class UI {
           quantity: 1,
         };
 
+        console.log(addedProduct);
+
         // add to cart
-        cart = [...cart, { addedProduct }];
+        cart = [...cart, { ...addedProduct }];
+        console.log(cart);
+
         // save cart to localstorage
         Storage.saveCarts(cart);
         // Update cart shop
-
+        this.setCartValue(cart);
         // add to cart item
+        this.addCartItems(addedProduct);
       });
     });
+  }
+
+  addCartItems(cartItem) {
+    const div = document.createElement("div");
+    const cartSection = document.querySelector(".cart-content");
+    div.classList.add("cart-item");
+    div.innerHTML = `<img class="cart-item-img" src=${cartItem.imageUrl} />
+    <div class="cart-item-desc">
+      <h4>${cartItem.title}</h4>
+      <h5>${cartItem.price}</h5>
+    </div>
+    <div class="cart-item-conteoller">
+      <i class="fas fa-chevron-up"></i>
+      <p>${cartItem.quantity}</p>
+      <i class="fas fa-chevron-down"></i>
+      </div>
+      <i class="far fa-trash-alt"></i>
+  `;
+    cartSection.appendChild(div);
+  }
+
+  setCartValue(cartItems) {
+    let quantityOfCart = 0;
+    const totalPrice = cartItems.reduce((acc, curr) => {
+      quantityOfCart += curr.quantity;
+      acc + curr.quantity * curr.price;
+    }, 0);
+    quantityOfOrder.innerText = quantityOfCart;
+    console.log(quantityOfOrder);
+    console.log(quantityOfCart);
+    cartTotal.innerText = totalPrice;
   }
 }
 
