@@ -6,7 +6,6 @@ const productCenter = document.querySelector(".products-center");
 const quantityOfOrder = document.querySelector(".cart-items");
 const cartTotal = document.querySelector(".cart-total");
 
-
 let cart = [];
 
 function showModalFunction() {
@@ -92,7 +91,7 @@ class UI {
         // save cart to localstorage
         Storage.saveCarts(cart);
         // Update cart shop
-
+        this.setCartValue(cart);
         // add to cart item
         this.addCartItems(addedProduct);
       });
@@ -116,6 +115,18 @@ class UI {
       <i class="far fa-trash-alt"></i>
   `;
     cartSection.appendChild(div);
+  }
+
+  setCartValue(cartItems) {
+    let quantityOfCart = 0;
+    const totalPrice = cartItems.reduce((acc, curr) => {
+      quantityOfCart += curr.quantity;
+      acc + curr.quantity * curr.price;
+    }, 0);
+    quantityOfOrder.innerText = quantityOfCart;
+    console.log(quantityOfOrder);
+    console.log(quantityOfCart);
+    cartTotal.innerText = totalPrice;
   }
 }
 
