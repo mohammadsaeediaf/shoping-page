@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const ui = new UI();
   ui.displayProduct(productsData);
   ui.getProductBtn();
-
+  ui.setUpApp();
   Storage.saveProducts(productsData);
   // console.log(product.getProduct());
 });
