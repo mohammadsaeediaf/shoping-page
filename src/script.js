@@ -121,12 +121,10 @@ class UI {
     let quantityOfCart = 0;
     const totalPrice = cartItems.reduce((acc, curr) => {
       quantityOfCart += curr.quantity;
-      acc + curr.quantity * curr.price;
+      return acc + curr.quantity * curr.price;
     }, 0);
     quantityOfOrder.innerText = quantityOfCart;
-    console.log(quantityOfOrder);
-    console.log(quantityOfCart);
-    cartTotal.innerText = totalPrice;
+    cartTotal.innerText = `The total price : ${totalPrice} $`;
   }
 }
 
@@ -147,6 +145,9 @@ class Storage {
     localStorage.setItem("Carts", JSON.stringify(cart));
   }
   // 4. get carts
+  static getCarts() {
+    return JSON.parse(localStorage.getItem("Carts"));
+  }
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
