@@ -121,12 +121,17 @@ class UI {
     let quantityOfCart = 0;
     const totalPrice = cartItems.reduce((acc, curr) => {
       quantityOfCart += curr.quantity;
-      acc + curr.quantity * curr.price;
+      return acc + curr.quantity * curr.price;
     }, 0);
     quantityOfOrder.innerText = quantityOfCart;
-    console.log(quantityOfOrder);
-    console.log(quantityOfCart);
-    cartTotal.innerText = totalPrice;
+    cartTotal.innerText = `The total price : ${totalPrice} $`;
+  }
+
+  setUpApp() {
+    console.log(Storage.getCarts());
+    cart = Storage.getCarts() || [];
+    cart.forEach((element) => this.addCartItems(element));
+    this.setCartValue(cart);
   }
 }
 
@@ -147,6 +152,9 @@ class Storage {
     localStorage.setItem("Carts", JSON.stringify(cart));
   }
   // 4. get carts
+  static getCarts() {
+    return JSON.parse(localStorage.getItem("Carts"));
+  }
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -155,6 +163,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const ui = new UI();
   ui.displayProduct(productsData);
   ui.getProductBtn();
+  ui.setUpApp();
   Storage.saveProducts(productsData);
   // console.log(product.getProduct());
 });
