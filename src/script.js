@@ -126,6 +126,13 @@ class UI {
     quantityOfOrder.innerText = quantityOfCart;
     cartTotal.innerText = `The total price : ${totalPrice} $`;
   }
+
+  setUpApp() {
+    console.log(Storage.getCarts());
+    cart = Storage.getCarts() || [];
+    cart.forEach((element) => this.addCartItems(element));
+    this.setCartValue(cart);
+  }
 }
 
 class Storage {
@@ -156,6 +163,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const ui = new UI();
   ui.displayProduct(productsData);
   ui.getProductBtn();
+
   Storage.saveProducts(productsData);
   // console.log(product.getProduct());
 });
