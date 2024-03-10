@@ -142,7 +142,14 @@ class UI {
     });
   }
 
-
+  removeCartItem(id) {
+    // Update Cart
+    cart = cart.filter((cartItem) => cartItem.id !== id);
+    // Update total price and cart items
+    this.setCartValue();
+    // Update Storage
+    this.saveCarts(cart);
+  }
 }
 
 class Storage {
