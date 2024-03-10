@@ -5,6 +5,7 @@ const closeModal = document.querySelector(".cart-item-confirm");
 const productCenter = document.querySelector(".products-center");
 const quantityOfOrder = document.querySelector(".cart-items");
 const cartTotal = document.querySelector(".cart-total");
+const clearCart = document.querySelector(".clear-cart");
 
 let cart = [];
 
@@ -48,7 +49,7 @@ class UI {
                 <p class="product-price">$ ${element.price}</p>
                 <p class="product-title">${element.title}</p>
             </div>
-            <button class="btn add-to-cart " data-id=${element.id}>
+            <button class="btn add-to-cart" data-id=${element.id}>
             <i class="fas fa-shopping-cart"></i>
                 add to cart
             </button>
@@ -63,7 +64,8 @@ class UI {
 
     buttons.forEach((btn) => {
       const id = btn.dataset.id;
-      const isInCart = cart.find((p) => p.id === id);
+      const isInCart = cart.find((p) => p.id === parseInt(id));
+      console.log(isInCart);
 
       if (isInCart) {
         btn.innerText = "In cart";
@@ -133,6 +135,14 @@ class UI {
     cart.forEach((element) => this.addCartItems(element));
     this.setCartValue(cart);
   }
+
+  cartLogic() {
+    clearCart.addEventListener("click", () => {
+      cart.forEach((e) => this.removeCartItem(e.id));
+    });
+  }
+
+
 }
 
 class Storage {
@@ -161,9 +171,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const products = new ProductsData();
 
   const ui = new UI();
+  ui.setUpApp();
   ui.displayProduct(productsData);
   ui.getProductBtn();
-  ui.setUpApp();
+  ui.cartLogic();
   Storage.saveProducts(productsData);
   // console.log(product.getProduct());
 });
