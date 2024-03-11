@@ -3,6 +3,7 @@ const cartModal = document.querySelector(".cart");
 const backDrop = document.querySelector(".backdrop");
 const closeModal = document.querySelector(".cart-item-confirm");
 const productCenter = document.querySelector(".products-center");
+const cartSection = document.querySelector(".cart-content");
 const quantityOfOrder = document.querySelector(".cart-items");
 const cartTotal = document.querySelector(".cart-total");
 const clearCart = document.querySelector(".clear-cart");
@@ -37,6 +38,8 @@ class ProductsData {
   }
 }
 
+let buttons = [];
+
 class UI {
   displayProduct(product) {
     let result = "";
@@ -50,7 +53,6 @@ class UI {
                 <p class="product-title">${element.title}</p>
             </div>
             <button class="btn add-to-cart" data-id=${element.id}>
-            <i class="fas fa-shopping-cart"></i>
                 add to cart
             </button>
         </div>`;
@@ -59,13 +61,12 @@ class UI {
   }
 
   getProductBtn() {
-    const getCartBtn = document.querySelectorAll(".add-to-cart");
-    const buttons = [...getCartBtn];
+    const getCartBtn = [...document.querySelectorAll(".add-to-cart")];
+    buttons = getCartBtn;
 
-    buttons.forEach((btn) => {
+    getCartBtn.forEach((btn) => {
       const id = btn.dataset.id;
       const isInCart = cart.find((p) => p.id === parseInt(id));
-      console.log(isInCart);
 
       if (isInCart) {
         btn.innerText = "In cart";
@@ -102,7 +103,6 @@ class UI {
 
   addCartItems(cartItem) {
     const div = document.createElement("div");
-    const cartSection = document.querySelector(".cart-content");
     div.classList.add("cart-item");
     div.innerHTML = `<img class="cart-item-img" src=${cartItem.imageUrl} />
     <div class="cart-item-desc">
@@ -110,11 +110,11 @@ class UI {
       <h5>${cartItem.price}</h5>
     </div>
     <div class="cart-item-conteoller">
-      <i class="fas fa-chevron-up"></i>
+      <i class="fas fa-chevron-up" data-id=${cartItem.id}></i>
       <p>${cartItem.quantity}</p>
-      <i class="fas fa-chevron-down"></i>
+      <i class="fas fa-chevron-down" data-id=${cartItem.id}></i>
       </div>
-      <i class="far fa-trash-alt"></i>
+      <i class="far fa-trash-alt" data-id=${cartItem.id}></i>
   `;
     cartSection.appendChild(div);
   }
@@ -137,19 +137,38 @@ class UI {
   }
 
   cartLogic() {
-    clearCart.addEventListener("click", () => {
-      cart.forEach((e) => this.removeCartItem(e.id));
-    });
+    clearCart.addEventListener("click", () => this.clearCart());
+  }
+
+  clearCart() {
+    // remove :
+    cart.forEach((e) => this.removeCartItem(e.id));
+    // Remove child of item
+    while (cartSection.children.length) {
+      cartSection.removeChild(cartSection.children[0]);
+    }
+    // close modal
+    closeModalFunction();
   }
 
   removeCartItem(id) {
     // Update Cart
     cart = cart.filter((cartItem) => cartItem.id !== id);
     // Update total price and cart items
-    this.setCartValue();
+    this.setCartValue(cart);
     // Update Storage
-    this.saveCarts(cart);
+    Storage.saveCarts(cart);
+    // Update add to cart button inner text
+    this.getSingleButton(id);
   }
+
+  getSingleButton(id) {
+    const btn = buttons.find((btn) => btn.dataset.id == id);
+    btn.innerText = "add to cart";
+    btn.disabled = false;
+  }
+
+
 }
 
 class Storage {
