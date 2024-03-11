@@ -110,9 +110,9 @@ class UI {
       <h5>${cartItem.price}</h5>
     </div>
     <div class="cart-item-conteoller">
-      <i class="fas fa-chevron-up" data-id=${cartItem.id}></i>
+      <i class="fas fa-chevron-up increment" data-id=${cartItem.id}></i>
       <p>${cartItem.quantity}</p>
-      <i class="fas fa-chevron-down" data-id=${cartItem.id}></i>
+      <i class="fas fa-chevron-down decrement" data-id=${cartItem.id}></i>
       </div>
       <i class="far fa-trash-alt" data-id=${cartItem.id}></i>
   `;
@@ -138,6 +138,26 @@ class UI {
 
   cartLogic() {
     clearCart.addEventListener("click", () => this.clearCart());
+    cartSection.addEventListener("click", (event) => {
+      console.log(event.target);
+
+      if (event.target.classList.contains("increment")) {
+        console.log(event.target.dataset.id);
+        const addQuantity = event.target;
+        // 1.get items from cart
+        const addedItem = cart.find(
+          (cItem) => cItem.id == addQuantity.dataset.id
+        );
+        addedItem.quantity++;
+        // 2. Update cart value
+        this.setCartValue(cart);
+        // 3. save cart
+        Storage.saveCarts(cart);
+        // Update cart ui (Quanity)
+        console.log(addQuantity.nextElementSibling);
+        addQuantity.nextElementSibling.innerText = addedItem.quantity;
+      }
+    });
   }
 
   clearCart() {
@@ -167,8 +187,6 @@ class UI {
     btn.innerText = "add to cart";
     btn.disabled = false;
   }
-
-
 }
 
 class Storage {
