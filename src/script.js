@@ -7,13 +7,13 @@ const productsData = [
   },
   {
     id: 2,
-    title: "saheb panel bed",
+    title: "the emperor panel bed",
     price: 14.99,
     imageUrl: "./images/product-2.jpeg",
   },
   {
     id: 3,
-    title: "folan panel bed",
+    title: "couple panel bed",
     price: 7.99,
     imageUrl: "./images/product-3.jpeg",
   },
