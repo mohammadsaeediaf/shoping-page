@@ -216,7 +216,28 @@ class UI {
         this.removeCartItem(removedFind.id);
         Storage.saveCarts(cart);
         cartSection.removeChild(removeItem.parentElement);
-      } 
+      } else if (event.target.classList.contains("decrement")) {
+        const subQuantity = event.target;
+        // 1.get items from cart
+        const substractedQuantity = cart.find(
+          (cItem) => cItem.id == subQuantity.dataset.id
+        );
+
+        if (substractedQuantity.quantity === 1) {
+          this.removeCartItem(substractedQuantity.id);
+          cartSection.removeChild(subQuantity.parentElement.parentElement);
+        }
+
+        substractedQuantity.quantity--;
+        // 2. Update cart value
+        this.setCartValue(cart);
+        // 3. save cart
+        Storage.saveCarts(cart);
+        // Update cart ui (Quanity)
+        console.log(subQuantity.previousElementSibling);
+        subQuantity.previousElementSibling.innerText =
+          substractedQuantity.quantity;
+      }
     });
   }
 
